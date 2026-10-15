@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>全游戏自检</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/pages/game.css">
+</head>
+<body>
+  <div id="game-container"></div>
+  <div id="result" style="display:none;"></div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/games/memory.js"></script>
+  <script src="js/games/abstraction.js"></script>
+  <script src="js/games/executive.js"></script>
+  <script src="js/games/calculation.js"></script>
+  <script src="js/games/attention.js"></script>
+  <script src="js/games/perception.js"></script>
+  <script src="js/games/schulte.js"></script>
+  <script src="js/games/visualarray.js"></script>
+  <script src="js/games/nback.js"></script>
+  <script src="js/games/trail.js"></script>
+  <script src="js/games/digitsymbol.js"></script>
+  <script src="js/games/flanker.js"></script>
+  <script src="js/games/operationspan.js"></script>
+  <script src="js/games/matrix.js"></script>
+  <script src="js/games/corsi.js"></script>
+  <script src="js/games/gonogo.js"></script>
+  <script src="js/games/serial7.js"></script>
+  <script src="js/games/bart.js"></script>
+  <script src="js/games/wordrecall.js"></script>
+  <script src="js/games/simon.js"></script>
+  <script src="js/games/wcst.js"></script>
+  <script>
+  // 全游戏自检：依次启动每个游戏的每个变体，检查关键 DOM 是否渲染
+  (async function selfTest() {
+    const container = document.getElementById('game-container');
+    const results = [];
+
+    const gameMap = {
+      memory: MemoryGame,
+      abstraction: AbstractionGame,
+      executive: ExecutiveGame,
+      calculation: CalculationGame,
+      attention: AttentionGame,
+      perception: PerceptionGame,
+      schulte: SchulteGame,
+      visualarray: VisualArrayGame,
+      nback: NBackGame,
+      trail: TrailGame,
+      digitsymbol: DigitSymbolGame,
+      flanker: FlankerGame,
+      operationspan: OperationSpanGame,
+      matrix: MatrixGame,
+      corsi: CorsiGame,
+      gonogo: GoNoGoGame,
+      serial7: Serial7Game,
+      bart: BartGame,
+      wordrecall: WordRecallGame,
+      simon: SimonGame,
+      wcst: WcstGame
+    };
+
+    // 每个游戏的关键元素检查器
+    const checkers = {
+      memory: () => !!document.getElementById('mem-numpad') && document.querySelectorAll('.num-pad__btn').length === 12,
+      abstraction: () => !!document.querySelector('#abs-body .option-btn'),
+      executive: () => document.querySelectorAll('.color-btn').length === 4,
+      calculation: () => !!document.getElementById('calc-question') && !!document.querySelector('#calc-options .option-btn'),
+      attention: () => document.querySelectorAll('.diff-panel').length === 2,
+      perception: () => !!document.querySelector('.spatial-ref') && document.querySelectorAll('.spatial-option').length === 4,
+      schulte: (g) => document.querySelectorAll('.schulte-cell').length === g.total,
+      visualarray: () => document.querySelectorAll('.va-cell').length === 9,
+      nback: () => !!document.getElementById('nb-stimulus'),
+      trail: () => document.querySelectorAll('.trail-cell').length >= 10,
+      digitsymbol: () => document.querySelectorAll('.ds-key-item').length === 10 && !!document.getElementById('ds-question'),
+      flanker: () => !!document.querySelector('.flanker-stimulus'),
+      operationspan: () => !!document.getElementById('os-options') || !!document.getElementById('os-letter-pad'),
+      matrix: () => !!document.querySelector('#mx-options .option-btn'),
+      corsi: () => document.querySelectorAll('.corsi-cell').length === 9,
+      gonogo: () => !!document.getElementById('gn-stimulus'),
+      serial7: () => !!document.getElementById('s7-numpad') && !!document.getElementById('s7-question'),
+      bart: () => !!document.getElementById('bart-balloon') && !!document.getElementById('bart-pump'),
+      wordrecall: () => !!document.querySelector('.wr-word-chip') || !!document.querySelector('.wr-recall-chip'),
+      simon: () => !!document.getElementById('sm-left') && !!document.getElementById('sm-stimulus'),
+      wcst: () => document.querySelectorAll('.wc-target').length === 4 && !!document.getElementById('wc-question')
+    };
+
+    for (const [gid, GameClass] of Object.entries(gameMap)) {
+      const variants = GameClass.variants || [{ id: 'default', name: '默认' }];
+      for (const v of variants) {
+        try {
+          if (container.firstChild) container.innerHTML = '';
+          const game = new GameClass(container, () => {}, v.id);
+          game.init();
+          game.start();
+          // 等待渲染
+          await new Promise(r => setTimeout(r, 300));
+          const ok = checkers[gid](game);
+          results.push(`${gid}/${v.id}: ${ok ? 'OK' : 'FAIL'}`);
+        } catch (e) {
+          results.push(`${gid}/${v.id}: ERROR ${e.message}`);
+        }
+      }
+    }
+
+    document.getElementById('result').textContent = results.join(' | ');
+    document.title = 'SELF_TEST:' + results.filter(r => r.includes('OK')).length + '/' + results.length;
+  })();
+  </script>
+</body>
+</html>

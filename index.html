@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="format-detection" content="telephone=no">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>脑健康评估</title>
+  <link rel="stylesheet" href="css/reset.css?v=20261009d">
+  <link rel="stylesheet" href="css/common.css?v=20261009d">
+  <link rel="stylesheet" href="css/pages/home.css?v=20261009d">
+  <link rel="stylesheet" href="css/pages/guide.css?v=20261009d">
+  <link rel="stylesheet" href="css/pages/game.css?v=20261009d">
+  <link rel="stylesheet" href="css/pages/report.css?v=20261009d">
+</head>
+<body>
+  <div class="app">
+
+    <!-- 首页 -->
+    <div class="page" id="page-home">
+      <div class="home">
+        <h1 class="home__title">脑健康评估</h1>
+        <p class="home__subtitle">通过 4 个趣味小游戏<br>评估您的认知功能状态</p>
+        <div class="home__features">
+          <span class="home__tag">记忆力测试</span>
+          <span class="home__tag">视知觉测试</span>
+          <span class="home__tag">执行力测试</span>
+          <span class="home__tag">抽象力测试</span>
+        </div>
+        <button class="home__btn" id="btn-start">开始评估</button>
+        <p class="home__disclaimer">评估结果仅供参考，不构成医学诊断</p>
+      </div>
+    </div>
+
+    <!-- 游戏引导页 -->
+    <div class="page hidden" id="page-guide">
+      <div class="guide">
+        <div class="guide__intro" id="guide-intro">
+          <div class="guide__step" id="guide-step">第 1/4 项</div>
+          <h2 class="guide__title" id="guide-title">记忆力测试</h2>
+          <p class="guide__desc" id="guide-desc">记住数字序列，按顺序输入</p>
+          <button class="btn btn-primary" id="btn-guide-start">准备好了</button>
+        </div>
+        <div class="guide__ready" id="guide-ready">
+          <div class="guide__countdown" id="guide-countdown">3</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 游戏页面 -->
+    <div class="page hidden" id="page-game">
+      <div id="game-container"></div>
+    </div>
+
+    <!-- 游戏结算弹窗 -->
+    <div class="game__overlay hidden" id="game-overlay">
+      <div class="game__overlay-content" id="game-overlay-content"></div>
+    </div>
+
+    <!-- 评估报告 -->
+    <div class="page hidden" id="page-report">
+      <div class="report">
+        <div class="report__header">
+          <h1 class="report__title">评估报告</h1>
+          <p class="report__desc">基于 4 项认知维度评估结果</p>
+        </div>
+
+        <div class="report__overall">
+          <div style="font-size:14px;color:var(--text-light);">综合评分</div>
+          <div class="report__overall-score" id="report-score">0</div>
+          <div class="report__overall-level" id="report-level">--</div>
+          <div class="report__overall-hint">各维度平均分</div>
+        </div>
+
+        <div class="report__radar">
+          <canvas id="radar-canvas"></canvas>
+        </div>
+
+        <div class="report__actions">
+          <button class="report__retry" id="btn-retry">重新测试</button>
+          <button class="report__back" id="btn-back-home">返回首页</button>
+        </div>
+
+        <div class="report__dimensions" id="report-dimensions"></div>
+
+        <p class="report__disclaimer">
+          评估结果仅供参考，不构成医学诊断。如有认知功能疑虑，请咨询专业医疗机构。
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- JS：正式流程使用 memory/corsi/simon/wcst，其余为测试台(?test=1)调试用 -->
+  <script src="js/utils.js?v=20261009d"></script>
+  <script src="js/store.js?v=20261009d"></script>
+  <script src="js/games/memory.js?v=20261009d"></script>
+  <script src="js/games/corsi.js?v=20261009d"></script>
+  <script src="js/games/simon.js?v=20261009d"></script>
+  <script src="js/games/wcst.js?v=20261009d"></script>
+  <!-- 测试台专用脚本（?test=1 时可用，正式流程不加载调用） -->
+  <script src="js/games/abstraction.js?v=20261008b"></script>
+  <script src="js/games/executive.js?v=20261008b"></script>
+  <script src="js/games/calculation.js?v=20261008b"></script>
+  <script src="js/games/attention.js?v=20261008b"></script>
+  <script src="js/games/perception.js?v=20261008b"></script>
+  <script src="js/games/schulte.js?v=20261008b"></script>
+  <script src="js/games/visualarray.js?v=20261008b"></script>
+  <script src="js/games/nback.js?v=20261008b"></script>
+  <script src="js/games/trail.js?v=20261008b"></script>
+  <script src="js/games/digitsymbol.js?v=20261008b"></script>
+  <script src="js/games/flanker.js?v=20261008b"></script>
+  <script src="js/games/operationspan.js?v=20261008b"></script>
+  <script src="js/games/matrix.js?v=20261008b"></script>
+  <script src="js/games/gonogo.js?v=20261008b"></script>
+  <script src="js/games/serial7.js?v=20261008b"></script>
+  <script src="js/games/bart.js?v=20261008b"></script>
+  <script src="js/games/wordrecall.js?v=20261008b"></script>
+  <script src="js/app.js?v=20261009d"></script>
+</body>
+</html>

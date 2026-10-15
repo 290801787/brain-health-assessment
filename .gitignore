@@ -1,0 +1,13 @@
+# 工作记忆与内部配置（不上传）
+.workbuddy/
+.workbuddyhonor/
+.claude/
+.vscode/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 临时文件
+*.log
+*.tmp

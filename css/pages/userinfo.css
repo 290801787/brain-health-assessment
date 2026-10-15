@@ -1,0 +1,81 @@
+/* User Info Page */
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 40px 24px;
+  background: var(--bg);
+}
+
+.userinfo__title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.userinfo__desc {
+  font-size: 14px;
+  color: var(--text-light);
+  margin-bottom: 32px;
+}
+
+.userinfo__form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.userinfo__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.userinfo__label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.userinfo__input {
+  padding: 14px 16px;
+  background: var(--bg-white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+.userinfo__input:focus {
+  border-color: var(--primary);
+}
+
+.userinfo__age-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.userinfo__age-btn {
+  padding: 10px 20px;
+  background: var(--bg-white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+
+.userinfo__age-btn.active {
+  border-color: var(--primary);
+  background: rgba(74, 144, 217, 0.08);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.userinfo__submit {
+  margin-top: auto;
+  padding-bottom: 20px;
+}
