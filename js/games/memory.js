@@ -68,22 +68,38 @@ class MemoryGame {
     document.getElementById('mem-length').textContent = this.currentLength;
     const display = document.getElementById('mem-display');
     const inputArea = document.getElementById('mem-input-area');
+    const userDisplay = document.getElementById('mem-user-display');
+
+    // 按位数动态调整字号/字距，保证长序列单行完整显示（不换行、不截断）
+    const style = this.getTextStyle(this.digits.length);
+    display.style.fontSize = style.fontSize + 'px';
+    display.style.letterSpacing = style.letterSpacing + 'px';
+    userDisplay.style.fontSize = style.fontSize + 'px';
+    userDisplay.style.letterSpacing = style.letterSpacing + 'px';
 
     // 显示数字
     inputArea.style.display = 'none';
     display.style.display = 'block';
-    display.textContent = this.digits.join('  ');
+    display.textContent = this.digits.join(' ');
     display.classList.remove('scale-in');
     void display.offsetWidth;
     display.classList.add('scale-in');
 
-    // 显示数字（时长可配置，快速模式 1s，默认 2s）
+    // 显示时长随位数递增：更长序列需要更多识记时间（默认 2s，长度每 +1 加 300ms）
+    const showTime = this.showTime + Math.max(0, this.digits.length - 5) * 300;
     setTimeout(() => {
       display.style.display = 'none';
       inputArea.style.display = 'block';
-      document.getElementById('mem-user-display').textContent = '';
+      userDisplay.textContent = '';
       this.bindNumpad();
-    }, this.showTime);
+    }, showTime);
+  }
+
+  // 按位数调整字号/字距：位数越多字号越小，保证单行放得下
+  getTextStyle(len) {
+    if (len >= 8) return { fontSize: 24, letterSpacing: 4 };
+    if (len >= 6) return { fontSize: 30, letterSpacing: 6 };
+    return { fontSize: 36, letterSpacing: 8 };
   }
 
   bindNumpad() {
@@ -107,7 +123,11 @@ class MemoryGame {
           this.userInput += num;
         }
       }
-      document.getElementById('mem-user-display').textContent = this.userInput.split('').join('  ');
+      // 输入回显同样用单空格 + 当前字号，长序列不截断
+      const userDisplay = document.getElementById('mem-user-display');
+      userDisplay.textContent = this.userInput.split('').join(' ');
+      userDisplay.style.fontSize = this.getTextStyle(this.digits.length).fontSize + 'px';
+      userDisplay.style.letterSpacing = this.getTextStyle(this.digits.length).letterSpacing + 'px';
     });
   }
 
@@ -138,8 +158,10 @@ class MemoryGame {
       // 错误 - 游戏结束
       display.style.display = 'block';
       inputArea.style.display = 'none';
-      display.innerHTML = `✗ <span style="font-size:20px;color:var(--danger);">正确: ${this.digits.join('  ')}</span>`;
+      display.innerHTML = `✗ <span style="font-size:20px;color:var(--danger);">正确: ${this.digits.join(' ')}</span>`;
       display.style.color = 'var(--danger)';
+      display.style.fontSize = '42px';
+      display.style.letterSpacing = '12px';
 
       setTimeout(() => {
         this.end();
